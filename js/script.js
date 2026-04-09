@@ -90,7 +90,7 @@ cs('.modelsInfo--size').forEach((size, sizeIndex) => {
 c('.modelsInfo--addButton').addEventListener('click', () => {
 
     // Lógica para adicionar o item ao carrinho
-    let size = parseInt(c('.modelsInfo--size.seleted').getAttribute('data-key'));
+    let size = parseInt(c('.modelsInfo--size.selected').getAttribute('data-key'));
     let identifier = modelsJson[key].id +'@' + size;
     let locaId = cart.findIndex((item) => item.identifier == identifier);
     if (locaId > -1) {
@@ -109,7 +109,7 @@ c('.modelsInfo--addButton').addEventListener('click', () => {
 
 // Evento de clique para exibir o carrinho quando há itens no carrinho
 c('.menu-openner').addEventListener('click', ()=> {
-    if(CaretPosition.length > 0){
+    if(cart.length > 0){
         c('aside').style.left = '0';
     };
 });
@@ -128,9 +128,9 @@ c('.cart--finalizar').addEventListener('click', ()=> {
 // Função para atualizar o conteúdo do carrinho
 function updateCart(){
     // Atualizar o número de itens exibido no ícone do carrinho no menu
-    c('.menu-openner span').innerHTML = cart.lenght;
+    c('.menu-openner span').innerHTML = cart.length;
     // Verificar se há itens no carriho
-    if(cart.lenght > 0){
+    if(cart.length > 0){
         // Adicionar a classe 'show' para exibir a barra lateral do carrinho
         c('aside').classList.add('show');
         // Limpar o conteúdo atual da lista de itens no carrinho
@@ -144,7 +144,7 @@ function updateCart(){
         // Iterar sobre os itens no carrinho
         cart.map((itemCart, index)=> {
             // Encontrar o item correspondente nos dados dos modelos
-            let modelItem = modelJson.find((itemBD)=>itemBD.id == itemCart.id);
+            let modelItem = modelsJson.find((itemBD)=>itemBD.id == itemCart.id);
 
             // Calcular o subtotal com base no preço e na quantidade do item
             subtotal += modelItem.price[itemCart.size] * itemCart.qt;
@@ -167,7 +167,7 @@ function updateCart(){
             }
 
             // Atualizar os dados do item clonado do carrinho
-            cartItem.querySelector('img').src = modelsItem.img;
+            cartItem.querySelector('img').src = modelItem.img;
             cartItem.querySelector('.cart--item--nome').innerHTML = `${modelItem.name} - ${modelItem.sizes[itemCart.size]}`;
             cartItem.querySelector('.cart--item--qt').innerHTML = itemCart.qt;
 
@@ -180,13 +180,13 @@ function updateCart(){
                 }
                 updateCart();
             });
-            cartItem.querySelector('.cart--item-qtmais').addEventListener('cick', () => {
+            cartItem.querySelector('.cart--item--qtmais').addEventListener('click', () => {
                 itemCart.qt ++;
                 updateCart();
             });
 
             // Adicionar o item clonado à lista de itens no carrinho
-            c('.cart').append(cardItem);
+            c('.cart').append(cartItem);
         });
 
         // Calcular o desconto e o total com base no subtotal
@@ -200,8 +200,8 @@ function updateCart(){
 
     } else {
         // Remover a classe "show" para ocultar a barra lateral do carrinho
-        c('.aside').classList.remove('show');
+        c('aside').classList.remove('show');
         // Esconder a barra lateral movendo-a para fora da tela
-        c('.aside').style.left = '100vw';
+        c('aside').style.left = '100vw';
     }
 };
